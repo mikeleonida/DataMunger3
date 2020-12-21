@@ -120,29 +120,38 @@ public class SqlProcessor {
 			return true;
 		}
 		
+		boolean returnValue = true;
 		String[] headers = reader.getHeader().getHeaders();
-		String value = null;
-		int index = -1;
-		for (int i=0; i<dataRow.length; i++) {
-			if (r.get(0).getName().equalsIgnoreCase(headers[i])) {
-				value = dataRow[i];
-				index = i;
+		while (!r.isEmpty() ) {			
+			String value = null;
+			int index = -1;
+			for (int i = 0; i < dataRow.length; i++) {
+				if (r.get(0).getName().equalsIgnoreCase(headers[i])) {
+					value = dataRow[i];
+					index = i;
+					break;
+				}
+			}
+			
+			boolean currentCondition = true; // default value if condition field not found in file
+			if (index != -1) {
+				currentCondition = checkCondition(value, r.get(0).getCondition(), r.get(0).getValue(),
+					reader.getColumnType().getDataTypes()[index]);
+			}
+				
+			if (currentCondition && (logicalOps.isEmpty() || logicalOps.get(0).equalsIgnoreCase("or"))) {
+				returnValue = true;
+				break;
+			} else if (!currentCondition && (logicalOps.isEmpty() || logicalOps.get(0).equalsIgnoreCase("and"))) {
+				returnValue = false;
 				break;
 			}
+
+			r.remove(0);
+			logicalOps.remove(0);
 		}
 		
-		boolean currentCondition = checkCondition(value, r.get(0).getCondition(), r.get(0).getValue(), 
-				reader.getColumnType().getDataTypes()[index]);
-		
-		if (currentCondition && (logicalOps.isEmpty() || logicalOps.get(0).equalsIgnoreCase("or"))) {
-			return true;
-		} else if (!currentCondition && (logicalOps.isEmpty() || logicalOps.get(0).equalsIgnoreCase("and"))) {
-			return false;
-		}
-		
-		r.remove(0);
-		logicalOps.remove(0);
-		return checkConditions(reader, dataRow, r, logicalOps);
+		return returnValue;
 	}
 	
 	public boolean checkCondition(String value, String condition, String restrictionValue, String type) {

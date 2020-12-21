@@ -120,6 +120,7 @@ public class DataMungerTest {
 			expectedIntegers[i] = Integer.parseInt(expecteds[i]);
 		}
 		
+		//System.out.println(Arrays.toString(sp.getQueryResults().get("id")));
 		assertArrayEquals(expectedIntegers, sp.getQueryResults().get("id"));
 	}
 	
