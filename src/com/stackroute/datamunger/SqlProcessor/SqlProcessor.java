@@ -121,12 +121,10 @@ public class SqlProcessor {
 		}
 		
 		String[] headers = reader.getHeader().getHeaders();
-		//String field = null;
 		String value = null;
 		int index = -1;
 		for (int i=0; i<dataRow.length; i++) {
 			if (r.get(0).getName().equalsIgnoreCase(headers[i])) {
-				//field = headers[i];
 				value = dataRow[i];
 				index = i;
 				break;
@@ -171,7 +169,6 @@ public class SqlProcessor {
 			return (value.compareTo(restrictionValue) != 0);
 		} else if (condition.equalsIgnoreCase("<")) {
 			if (type.equals("java.lang.Integer")) {
-				//System.out.println("value = " + value + ", restrictionValue = " + restrictionValue);
 				return (Integer.parseInt(value) < Integer.parseInt(restrictionValue));
 			} else if (type.equals("java.lang.Double")) {
 				return (Double.parseDouble(value) < Double.parseDouble(restrictionValue));
@@ -192,6 +189,7 @@ public class SqlProcessor {
 			} 
 			return (value.compareToIgnoreCase(restrictionValue) == 0);
 		}
+		
 		//default, probably should not happen
 		return true;
 	}
