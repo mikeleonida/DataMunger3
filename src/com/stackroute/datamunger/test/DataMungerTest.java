@@ -26,14 +26,13 @@ public class DataMungerTest {
 		try {
 			reader = new CsvQueryProcessor(DEFAULT_DATA_FILE);
 		} catch (FileNotFoundException e) {
-//			System.out.println("BeforeClass");
-//			System.out.println(e.getMessage());
+			
 		}
 	}
 
 	@AfterClass
 	public static void close() throws FileNotFoundException {
-		//System.out.println("After class");
+
 	}
 
 	@Test
@@ -63,10 +62,7 @@ public class DataMungerTest {
 				+ "String, java.lang.Integer, String, java.lang.Integer, java.lang.Integer, String, String, "
 				+ "String, String, String";
 		String[] expecteds = expectedsString.split(", ");
-		
-//		System.out.println(Arrays.toString(reader.getColumnType().getDataTypes()));
-//		System.out.println(Arrays.toString(expecteds));
-		
+
 		assertArrayEquals(expecteds, reader.getColumnType().getDataTypes());
 	}
 
@@ -90,14 +86,12 @@ public class DataMungerTest {
 
 	@Test(expected = FileNotFoundException.class)
 	public void testFileNotFound() throws FileNotFoundException {
-		//System.out.println(reader.getCsvFile());
 		reader = new CsvQueryProcessor("iplipl.csv");
 	}
 
 	@Test
 	public void testNotNullHeader() {
 		try {
-			//System.out.println("Headers[0] = " + reader.getHeader().getHeaders()[0]);
 			assertNotNull(reader.getHeader().getHeaders()[0]);
 		} catch (IOException ioe) {
 			assertTrue(ioe.getMessage(), false);
@@ -107,7 +101,6 @@ public class DataMungerTest {
 	@Test
 	public void testNotNullDataTypes() {
 		try {
-			//System.out.println("Data[0] = " + reader.getColumnType().getDataTypes()[0]);
 			assertNotNull(reader.getColumnType().getDataTypes()[0]);
 		} catch (IOException ioe) {
 			assertTrue(ioe.getMessage(), false);
@@ -119,7 +112,6 @@ public class DataMungerTest {
 		String query = "Select id, team1, team2, venue from data/ipl3.csv "
 				+ "where win_by_runs < 40 and win_by_wickets < 6";
 		SqlProcessor sp = new SqlProcessor(query);
-		//System.out.println(Arrays.toString(sp.getQueryResults().get("id")));
 		
 		String expectedsString = "2, 4, 5, 8, 9, 14, 15, 17, 21, 22, 23, 28, 29, 32, 33, 34, 36, 39";
 		String[] expecteds = expectedsString.split(", ");

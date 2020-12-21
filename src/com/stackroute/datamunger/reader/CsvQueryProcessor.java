@@ -13,7 +13,7 @@ public class CsvQueryProcessor extends QueryProcessingEngine {
 	private String csvFile = "";
 	private int currentDataRow = -1;
 	
-	// Parameterized constructor to initialize filename
+	// Parameterized constructor to initialize filename; only relative works right now!
 	public CsvQueryProcessor(String fileName) throws FileNotFoundException {
 		FileReader fr = new FileReader(fileName);
 //		FileReader fr = new FileReader(getClass().getClassLoader()
@@ -148,7 +148,6 @@ public class CsvQueryProcessor extends QueryProcessingEngine {
 			return null;
 		}
 		
-		// populate the header object with the String array containing the header names
 		String[] values = (secondLine+" ").split(","); //add empty space in case last cell is empty
 		int len = values.length;
 		String[] types = new String[len];
@@ -164,9 +163,6 @@ public class CsvQueryProcessor extends QueryProcessingEngine {
 					types[i] = "java.lang.Double";
 				} catch (NumberFormatException ex) {
 					types[i] = "String";
-//					if (value.compareTo("") != 0) {
-//						types[i] = "String";
-//					}
 				}
 			}
 		}
