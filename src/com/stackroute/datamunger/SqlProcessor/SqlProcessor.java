@@ -1,4 +1,4 @@
-package com.stackroute.datamunger.SqlProcessor;
+package com.stackroute.datamunger.sqlprocessor;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

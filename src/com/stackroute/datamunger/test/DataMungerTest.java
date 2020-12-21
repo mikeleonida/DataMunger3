@@ -13,8 +13,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.stackroute.datamunger.SqlProcessor.SqlProcessor;
 import com.stackroute.datamunger.reader.CsvQueryProcessor;
+import com.stackroute.datamunger.sqlprocessor.SqlProcessor;
 
 public class DataMungerTest {
 
@@ -119,7 +119,16 @@ public class DataMungerTest {
 		String query = "Select id, team1, team2, venue from data/ipl3.csv "
 				+ "where win_by_runs < 40 and win_by_wickets < 6";
 		SqlProcessor sp = new SqlProcessor(query);
-		System.out.println(Arrays.toString(sp.getQueryResults().get("id")));
+		//System.out.println(Arrays.toString(sp.getQueryResults().get("id")));
+		
+		String expectedsString = "2, 4, 5, 8, 9, 14, 15, 17, 21, 22, 23, 28, 29, 32, 33, 34, 36, 39";
+		String[] expecteds = expectedsString.split(", ");
+		Integer[] expectedIntegers = new Integer[expecteds.length];
+		for (int i=0; i<expecteds.length; i++) {
+			expectedIntegers[i] = Integer.parseInt(expecteds[i]);
+		}
+		
+		assertArrayEquals(expectedIntegers, sp.getQueryResults().get("id"));
 	}
 	
 //	private void display(String testCaseName, String result) 	{
