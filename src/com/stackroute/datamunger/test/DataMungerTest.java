@@ -1,8 +1,6 @@
 package com.stackroute.datamunger.test;
 
 import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -15,28 +13,27 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.stackroute.datamunger.query.DataTypeDefinitions;
-import com.stackroute.datamunger.query.Header;
+import com.stackroute.datamunger.SqlProcessor.SqlProcessor;
 import com.stackroute.datamunger.reader.CsvQueryProcessor;
 
 public class DataMungerTest {
 
 	private static CsvQueryProcessor reader;
-
+	public static final String DEFAULT_DATA_FILE = "data/ipl2.csv"; //"C:/Users/Mike/Desktop/data/ipl.csv";
+	
 	@BeforeClass
 	public static void init() {
-		System.out.println("Before class");
 		try {
-			reader = new CsvQueryProcessor("data/ipl.csv");
-			System.out.println("After opening file");
+			reader = new CsvQueryProcessor(DEFAULT_DATA_FILE);
 		} catch (FileNotFoundException e) {
-			System.out.println(e.getMessage());
+//			System.out.println("BeforeClass");
+//			System.out.println(e.getMessage());
 		}
 	}
 
 	@AfterClass
 	public static void close() throws FileNotFoundException {
-		System.out.println("After class");
+		//System.out.println("After class");
 	}
 
 	@Test
@@ -92,15 +89,15 @@ public class DataMungerTest {
 	}
 
 	@Test(expected = FileNotFoundException.class)
-	public void testFileNotFound() {
-		
-		//reader = new CsvQueryProcessor("ipl.csv");
-		
+	public void testFileNotFound() throws FileNotFoundException {
+		//System.out.println(reader.getCsvFile());
+		reader = new CsvQueryProcessor("iplipl.csv");
 	}
 
 	@Test
 	public void testNotNullHeader() {
 		try {
+			//System.out.println("Headers[0] = " + reader.getHeader().getHeaders()[0]);
 			assertNotNull(reader.getHeader().getHeaders()[0]);
 		} catch (IOException ioe) {
 			assertTrue(ioe.getMessage(), false);
@@ -110,13 +107,22 @@ public class DataMungerTest {
 	@Test
 	public void testNotNullDataTypes() {
 		try {
+			//System.out.println("Data[0] = " + reader.getColumnType().getDataTypes()[0]);
 			assertNotNull(reader.getColumnType().getDataTypes()[0]);
 		} catch (IOException ioe) {
 			assertTrue(ioe.getMessage(), false);
 		}
 	}
 
-	private void display(String testCaseName, String result) 	{
+	@Test
+	public void testSqlProcessor() {
+		String query = "Select id, team1, team2, venue from data/ipl3.csv "
+				+ "where win_by_runs < 40 and win_by_wickets < 6";
+		SqlProcessor sp = new SqlProcessor(query);
+		System.out.println(Arrays.toString(sp.getQueryResults().get("id")));
 	}
+	
+//	private void display(String testCaseName, String result) 	{
+//	}
 
 }
